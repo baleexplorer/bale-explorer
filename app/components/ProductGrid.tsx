@@ -11,19 +11,23 @@ export default function ProductGrid({ limit, horizontal = false }: { limit?: num
   const displayProducts = limit ? products.slice(0, limit) : products;
 
   useEffect(() => {
-    if (!horizontal || !scrollRef.current || displayProducts.length <= 1) return;
+    if (!horizontal || !scrollRef.current) return;
+    scrollRef.current.scrollLeft = 0;
+
+    if (displayProducts.length <= 1) return;
 
     const container = scrollRef.current;
-    const scrollAmount = container.offsetWidth * 0.7;
+    const firstCard = container.querySelector('[data-card]');
+    const cardWidth = firstCard ? firstCard.getBoundingClientRect().width + 16 : container.offsetWidth * 0.35;
 
     const timer = setInterval(() => {
       if (isPaused) return;
-      if (container.scrollLeft + container.offsetWidth >= container.scrollWidth - 1) {
+      if (container.scrollLeft + container.offsetWidth >= container.scrollWidth - 2) {
         container.scrollTo({ left: 0, behavior: 'smooth' });
       } else {
-        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        container.scrollBy({ left: cardWidth, behavior: 'smooth' });
       }
-    }, 3500);
+    }, 3000);
 
     return () => clearInterval(timer);
   }, [horizontal, displayProducts.length, isPaused]);
@@ -38,7 +42,7 @@ export default function ProductGrid({ limit, horizontal = false }: { limit?: num
         onMouseLeave={() => setIsPaused(false)}
       >
         {displayProducts.map((product) => (
-          <div key={product.id} className="snap-start flex-shrink-0" style={{ width: 'min(70vw, 320px)' }}>
+          <div key={product.id} data-card className="snap-start flex-shrink-0" style={{ width: 'min(70vw, 320px)' }}>
             <ProductCard product={product} />
           </div>
         ))}
