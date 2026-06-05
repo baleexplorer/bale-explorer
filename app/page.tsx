@@ -6,58 +6,6 @@ import { ArrowRight, Instagram, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import JsonLd from '@/app/components/JsonLd';
-
-export const metadata: Metadata = {
-  title: 'Bale Explorer — Built for the wild, made for everyday',
-  description:
-    'Calm. Explore. Experience. Kaos dan apparel outdoor asli Kalimantan yang nyaman dipakai di gunung maupun di kota. Brand outdoor pertama di Kalimantan.',
-  keywords: [
-    'brand outdoor Kalimantan',
-    'kaos hiking Pontianak',
-    'apparel outdoor Kalbar',
-    'baju outdoor Singkawang',
-    'brand lokal Kalimantan',
-    'kaos outdoor',
-    'Bale Explorer',
-  ],
-  alternates: {
-    canonical: 'https://baleexplorer.com',
-  },
-  openGraph: {
-    title: 'Bale Explorer — Built for the wild, made for everyday',
-    description: 'Brand outdoor asli Kalimantan. Kaos & apparel untuk petualang sejati.',
-    url: 'https://baleexplorer.com',
-    siteName: 'Bale Explorer',
-    images: [
-      {
-        url: 'https://baleexplorer.com/images/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Bale Explorer - Brand Outdoor Asli Kalimantan',
-      },
-    ],
-    locale: 'id_ID',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Bale Explorer — Built for the wild, made for everyday',
-    description: 'Brand outdoor asli Kalimantan. Kaos & apparel untuk petualang sejati.',
-    images: ['https://baleexplorer.com/images/og-image.jpg'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-};
-
 const organizationLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',

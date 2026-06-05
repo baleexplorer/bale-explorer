@@ -23,8 +23,16 @@ export const metadata: Metadata = {
     template: '%s | Bale Explorer',
   },
   description:
-    'Calm. Explore. Experience. Kaos dan apparel outdoor yang nyaman dipakai di gunung maupun di kota.',
-  keywords: ['bale explorer', 'outdoor', 'apparel', 'tshirt', 'adventure', 'indonesia'],
+    'Brand outdoor asli Kalimantan. Kaos dan apparel outdoor yang nyaman dipakai di gunung maupun di kota.',
+  keywords: [
+    'brand outdoor Kalimantan',
+    'kaos hiking Pontianak',
+    'apparel outdoor Kalbar',
+    'baju outdoor Singkawang',
+    'brand lokal Kalimantan',
+    'kaos outdoor',
+    'Bale Explorer',
+  ],
   authors: [{ name: 'Bale Explorer' }],
   openGraph: {
     type: 'website',
@@ -33,13 +41,13 @@ export const metadata: Metadata = {
     siteName: 'Bale Explorer',
     title: 'Bale Explorer — Built for the wild, made for everyday',
     description:
-      'Calm. Explore. Experience. Kaos dan apparel outdoor yang nyaman dipakai di gunung maupun di kota.',
+      'Brand outdoor asli Kalimantan. Kaos & apparel untuk petualang sejati.',
     images: [
       {
-        url: '/images/og.jpg',
+        url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Bale Explorer',
+        alt: 'Bale Explorer - Brand Outdoor Asli Kalimantan',
       },
     ],
   },
@@ -47,8 +55,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Bale Explorer — Built for the wild, made for everyday',
     description:
-      'Calm. Explore. Experience. Kaos dan apparel outdoor yang nyaman dipakai di gunung maupun di kota.',
-    images: ['/images/og.jpg'],
+      'Brand outdoor asli Kalimantan. Kaos & apparel untuk petualang sejati.',
+    images: ['/images/og-image.jpg'],
   },
   robots: {
     index: true,
@@ -65,7 +73,7 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
   },
   alternates: {
-    canonical: '/',
+    canonical: 'https://baleexplorer.com',
   },
 };
 
