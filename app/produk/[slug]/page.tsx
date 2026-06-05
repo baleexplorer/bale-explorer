@@ -3,10 +3,11 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { products } from '@/lib/data/products';
-import { formatPrice, getRelatedProducts } from '@/lib/utils/formatPrice';
+import { formatPrice } from '@/lib/utils/formatPrice';
 import { MessageCircle } from 'lucide-react';
 import JsonLd from '@/app/components/JsonLd';
 import ProductCard from '@/app/components/ProductCard';
+import ProductImageSlider from '@/app/components/ProductImageSlider';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: product.name,
       description: product.description,
-      images: [product.image],
+      images: [product.images[0]],
       type: 'website',
     },
   };
@@ -44,7 +45,7 @@ const productLd = (product: typeof products[0]) => ({
   '@type': 'Product',
   name: product.name,
   description: product.description,
-  image: `https://baleexplorer.com${product.image}`,
+  image: `https://baleexplorer.com${product.images[0]}`,
   offers: {
     '@type': 'Offer',
     priceCurrency: 'IDR',
@@ -62,7 +63,9 @@ export default async function ProdukPage({ params }: Props) {
     notFound();
   }
 
-  const relatedProducts = getRelatedProducts(slug);
+  const relatedProducts = products
+    .filter((p) => p.tag === product.tag && p.slug !== product.slug)
+    .slice(0, 3);
 
   const whatsappLink = `https://wa.me/6281234567890?text=${encodeURIComponent(product.whatsappMessage)}`;
 
@@ -80,17 +83,7 @@ export default async function ProdukPage({ params }: Props) {
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-bg-card border border-border">
-              <Image
-                src={product.image}
-                alt={product.name}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-
+            <ProductImageSlider images={product.images} name={product.name} />
             <div className="flex flex-col">
               <span className="inline-block px-3 py-1 text-[10px] uppercase tracking-wider text-accent border border-accent/20 rounded-full mb-4 w-fit" style={{ background: 'rgba(196,163,90,0.1)' }}>
                 {product.tag}

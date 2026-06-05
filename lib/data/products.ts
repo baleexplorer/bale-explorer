@@ -5,7 +5,7 @@ export interface Product {
   tag: 'T-Shirt' | 'Accessories';
   description: string;
   price: number;
-  image: string;
+  images: string[];
   whatsappMessage: string;
   details?: string;
   relatedPosts?: string[];
@@ -14,82 +14,120 @@ export interface Product {
 export const products: Product[] = [
   {
     id: '1',
-    slug: 'born-to-explore',
-    name: 'Born To Explore',
+    slug: 'borneo-indonesian-culture',
+    name: 'Borneo Indonesian Culture',
     tag: 'T-Shirt',
     description: 'Desain klasik untuk para petualang sejati. Nyaman dipakai di mana saja.',
     price: 149000,
-    image: '/images/products/born-to-explore.jpg',
+    images: [
+      '/images/products/borneo-indonesian-culture-1.png',
+      '/images/products/borneo-indonesian-culture-2.jpeg',
+    ],
     whatsappMessage:
-      'Halo Bale Explorer, saya mau order Born To Explore',
+      'Halo Bale Explorer, saya mau order Borneo Indonesian Culture',
     details:
       'Bahan 100% cotton combed 30s. Nyaman, breathable, dan awet. Tersedia dalam ukuran S, M, L, XL, XXL.',
     relatedPosts: ['tips-mendaki-gunung-pemula', 'perbedaan-cotton-combed'],
   },
   {
     id: '2',
-    slug: 'summit-journey',
-    name: 'Summit Journey',
+    slug: 'yoshinoya',
+    name: 'Yoshinoya',
     tag: 'T-Shirt',
     description: 'Perjalanan ke puncak dimulai dari langkah pertama. Desain inspiratif.',
     price: 149000,
-    image: '/images/products/summit-journey.jpg',
+    images: [
+      '/images/products/yoshinoya.jpeg',
+    ],
     whatsappMessage:
-      'Halo Bale Explorer, saya mau order Summit Journey',
+      'Halo Bale Explorer, saya mau order Yoshinoya',
     details:
       'Bahan 100% cotton combed 30s. Nyaman, breathable, dan awet. Tersedia dalam ukuran S, M, L, XL, XXL.',
     relatedPosts: ['tips-mendaki-gunung-pemula'],
   },
   {
     id: '3',
-    slug: 'hikers',
-    name: 'Hikers',
+    slug: 'the-mountain',
+    name: 'The Mountain',
     tag: 'T-Shirt',
     description: 'Untuk kamu yang selalu siap menjelajah setiap sudut bumi.',
     price: 149000,
-    image: '/images/products/hikers.jpg',
-    whatsappMessage: 'Halo Bale Explorer, saya mau order Hikers',
+    images: [
+      '/images/products/the-mountain.jpeg',
+      '/images/products/the-mountain-2.jpeg',
+    ],
+    whatsappMessage: 'Halo Bale Explorer, saya mau order The Mountain',
     details:
       'Bahan 100% cotton combed 30s. Nyaman, breathable, dan awet. Tersedia dalam ukuran S, M, L, XL, XXL.',
     relatedPosts: ['tips-mendaki-gunung-pemula', 'perbedaan-cotton-combed'],
   },
   {
     id: '4',
-    slug: 'kita-ke-bawa',
-    name: 'Kita Ke Bawa',
+    slug: 'borneo-explorer',
+    name: 'Borneo Explorer',
     tag: 'T-Shirt',
     description: 'Desain lokal dengan sentuhan humor dan semangat komunitas.',
     price: 149000,
-    image: '/images/products/kita-ke-bawa.jpg',
-    whatsappMessage: 'Halo Bale Explorer, saya mau order Kita Ke Bawa',
+    images: [
+      '/images/products/borneo-explorer.jpeg',
+    ],
+    whatsappMessage: 'Halo Bale Explorer, saya mau order Borneo Explorer',
     details:
       'Bahan 100% cotton combed 30s. Nyaman, breathable, dan awet. Tersedia dalam ukuran S, M, L, XL, XXL.',
     relatedPosts: ['perbedaan-cotton-combed'],
   },
   {
     id: '5',
-    slug: 'bale-explorer-logo',
-    name: 'Bale Explorer Logo',
+    slug: 'the-hikers',
+    name: 'The Hikers',
     tag: 'T-Shirt',
     description: 'Logo signature brand kami. Simple, bold, dan timeless.',
     price: 139000,
-    image: '/images/products/bale-explorer-logo.jpg',
-    whatsappMessage: 'Halo Bale Explorer, saya mau order Bale Explorer Logo',
+    images: [
+      '/images/products/the-hikers.png',
+    ],
+    whatsappMessage: 'Halo Bale Explorer, saya mau order The Hikers',
     details:
       'Bahan 100% cotton combed 30s. Nyaman, breathable, dan awet. Tersedia dalam ukuran S, M, L, XL, XXL.',
     relatedPosts: ['perbedaan-cotton-combed'],
   },
   {
     id: '6',
-    slug: 'bucket-hat',
-    name: 'Bucket Hat',
-    tag: 'Accessories',
-    description: 'Pelindung sempurna untuk petualangan di bawah terik matahari.',
-    price: 99000,
-    image: '/images/products/bucket-hat.jpg',
-    whatsappMessage: 'Halo Bale Explorer, saya mau order Bucket Hat',
+    slug: 'indonesia',
+    name: 'Indonesia',
+    tag: 'T-Shirt',
+    description: 'Bangga menjadi bangsa Indonesia.',
+    price: 149000,
+    images: [
+      '/images/products/indonesia.jpeg',
+      '/images/products/indonesia-2.png',
+    ],
+    whatsappMessage: 'Halo Bale Explorer, saya mau order Indonesia',
     details:
-      'Bucket hat dengan bahan polyester quick-dry. Ringkas, mudah dibawa, dan cocok untuk aktivitas outdoor.',
+      'Bahan 100% cotton combed 30s. Nyaman, breathable, dan awet. Tersedia dalam ukuran S, M, L, XL, XXL.',
+    relatedPosts: ['tips-mendaki-gunung-pemula'],
+  },
+  {
+    id: '7',
+    slug: 'kita-ke-sana',
+    name: 'Kita Ke Sana',
+    tag: 'T-Shirt',
+    description: 'Desain lokal dengan semangat petualangan bersama.',
+    price: 149000,
+    images: [
+      '/images/products/kita-ke-sana.png',
+    ],
+    whatsappMessage: 'Halo Bale Explorer, saya mau order Kita Ke Sana',
+    details:
+      'Bahan 100% cotton combed 30s. Nyaman, breathable, dan awet. Tersedia dalam ukuran S, M, L, XL, XXL.',
     relatedPosts: ['tips-mendaki-gunung-pemula'],
   },
 ];
+
+export function getProductBySlug(slug: string): Product | undefined {
+  return products.find((p) => p.slug === slug);
+}
+
+export function getRelatedProducts(slugs: string[]): Product[] {
+  return products.filter((p) => slugs.includes(p.slug));
+}
