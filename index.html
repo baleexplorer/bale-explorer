@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bale Explorer — Built for the wild, made for everyday</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg-card: #141414;
+            --bg-hover: #1a1a1a;
+            --text: #f5f5f5;
+            --text-muted: #888888;
+            --accent: #c4a35a;
+            --accent-hover: #d4b76a;
+            --border: #2a2a2a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .brand { font-family: 'Space Grotesk', sans-serif; }
+
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(10,10,10,0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); transition: all 0.3s;
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 1.2rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand {
+            font-size: 1.4rem; font-weight: 700; letter-spacing: -0.5px;
+            color: var(--text); text-decoration: none;
+        }
+        .brand span { color: var(--accent); }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-muted); font-size: 0.9rem;
+            font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;
+            transition: color 0.3s; position: relative;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -6px; left: 0;
+            width: 0; height: 2px; background: var(--accent); transition: width 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
+        .hamburger {
+            display: none; flex-direction: column; cursor: pointer; gap: 5px;
+            background: none; border: none;
+        }
+        .hamburger span { width: 24px; height: 2px; background: var(--text); transition: 0.3s; }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden; padding: 2rem;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(196,163,90,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(196,163,90,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .hero-bg {
+            position: absolute; inset: 0; opacity: 0.15;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M0,600 L0,400 Q200,350 400,300 Q600,200 800,250 Q1000,300 1200,200 L1200,600 Z" fill="%23222"/></svg>') bottom/cover no-repeat;
+        }
+        .hero-content {
+            position: relative; z-index: 2; text-align: center; max-width: 800px;
+            animation: fadeInUp 1s ease forwards;
+        }
+        .hero-tag {
+            display: inline-block; padding: 0.4rem 1.2rem; border: 1px solid var(--border);
+            border-radius: 50px; font-size: 0.75rem; text-transform: uppercase;
+            letter-spacing: 2px; color: var(--accent); margin-bottom: 2rem;
+            background: rgba(196,163,90,0.08);
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; line-height: 1.1;
+            margin-bottom: 1.5rem; letter-spacing: -2px;
+        }
+        .hero h1 .accent { color: var(--accent); }
+        .hero p {
+            font-size: 1.15rem; color: var(--text-muted); max-width: 500px;
+            margin: 0 auto 2.5rem; line-height: 1.7;
+        }
+        .hero-values {
+            display: flex; justify-content: center; gap: 2rem; margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        .value-item {
+            display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;
+            color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;
+        }
+        .value-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 1rem 2.5rem; background: var(--accent); color: var(--bg);
+            text-decoration: none; border-radius: 50px; font-weight: 600;
+            font-size: 0.9rem; letter-spacing: 0.5px; transition: all 0.3s;
+            border: none; cursor: pointer;
+        }
+        .btn:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 10px 40px rgba(196,163,90,0.2); }
+        .btn-outline {
+            background: transparent; color: var(--text); border: 1px solid var(--border);
+            margin-left: 1rem;
+        }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(196,163,90,0.05); }
+
+        /* About */
+        .about {
+            padding: 8rem 2rem; max-width: 1000px; margin: 0 auto; text-align: center;
+            position: relative;
+        }
+        .about::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 1px; height: 80px; background: linear-gradient(to bottom, transparent, var(--border));
+        }
+        .section-label {
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px;
+            color: var(--accent); margin-bottom: 1.5rem; display: block;
+        }
+        .about h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .about p {
+            color: var(--text-muted); font-size: 1.05rem; max-width: 600px;
+            margin: 0 auto; line-height: 1.8;
+        }
+        .about-values {
+            display: flex; justify-content: center; gap: 3rem; margin-top: 3rem; flex-wrap: wrap;
+        }
+        .about-value {
+            text-align: center;
+        }
+        .about-value .num {
+            font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700;
+            color: var(--accent); display: block;
+        }
+        .about-value .label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Products */
+        .products {
+            padding: 6rem 2rem; background: var(--bg-card); position: relative;
+        }
+        .products::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(to right, transparent, var(--border), transparent);
+        }
+        .products-container { max-width: 1200px; margin: 0 auto; }
+        .products-header {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;
+        }
+        .products-header h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; }
+        .products-header p { color: var(--text-muted); margin-top: 0.5rem; }
+
+        .product-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .product-card {
+            background: var(--bg); border-radius: 16px; overflow: hidden;
+            border: 1px solid var(--border); transition: all 0.4s;
+            position: relative; group: true;
+        }
+        .product-card:hover {
+            border-color: var(--accent); transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+        .product-img-wrap {
+            position: relative; overflow: hidden; aspect-ratio: 1;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .product-img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;
+        }
+        .product-card:hover .product-img { transform: scale(1.05); }
+        .product-overlay {
+            position: absolute; inset: 0; background: rgba(10,10,10,0.6);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .product-card:hover .product-overlay { opacity: 1; }
+        .product-overlay .btn-small {
+            padding: 0.6rem 1.5rem; font-size: 0.8rem; transform: translateY(10px);
+            transition: transform 0.3s;
+        }
+        .product-card:hover .product-overlay .btn-small { transform: translateY(0); }
+
+        .product-info { padding: 1.5rem; }
+        .product-tag {
+            display: inline-block; padding: 0.2rem 0.7rem; background: rgba(196,163,90,0.1);
+            border: 1px solid rgba(196,163,90,0.2); border-radius: 20px;
+            font-size: 0.7rem; color: var(--accent); text-transform: uppercase;
+            letter-spacing: 1px; margin-bottom: 0.75rem;
+        }
+        .product-info h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
+        .product-info .desc { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; line-height: 1.5; }
+        .product-price {
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem;
+            font-weight: 700; color: var(--accent);
+        }
+        .product-price .strike {
+            font-size: 0.85rem; color: var(--text-muted); text-decoration: line-through;
+            margin-left: 0.5rem; font-weight: 400;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 2rem; text-align: center; position: relative;
+            overflow: hidden;
+        }
+        .cta::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at center, rgba(196,163,90,0.06) 0%, transparent 70%);
+        }
+        .cta-content { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
+        .cta h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 1rem; }
+        .cta p { color: var(--text-muted); margin-bottom: 2rem; font-size: 1.05rem; }
+        .cta-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border); padding: 3rem 2rem;
+            text-align: center; color: var(--text-muted); font-size: 0.85rem;
+        }
+        footer .brand { font-size: 1.2rem; margin-bottom: 1rem; display: inline-block; }
+        footer .socials {
+            display: flex; justify-content: center; gap: 1.5rem; margin: 1.5rem 0;
+        }
+        footer .socials a {
+            color: var(--text-muted); text-decoration: none; transition: color 0.3s;
+            font-size: 0.9rem;
+        }
+        footer .socials a:hover { color: var(--accent); }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            opacity: 0; transform: translateY(30px); transition: all 0.8s ease;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0;
+                background: var(--bg); flex-direction: column; padding: 1.5rem 2rem;
+                border-bottom: 1px solid var(--border); gap: 1.5rem;
+            }
+            .nav-links.active { display: flex; }
+            .hamburger { display: flex; }
+            .hero-values { gap: 1rem; }
+            .about-values { gap: 2rem; }
+            .btn-outline { margin-left: 0; margin-top: 0.5rem; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .products-header { flex-direction: column; align-items: flex-start; }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+    </style>
+    <base target="_blank">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="brand">Bale<span>.</span>Explorer</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#beranda">Beranda</a></li>
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#etalase">Etalase</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="beranda">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <span class="hero-tag">Mountain & Outdoor Inspired</span>
+            <h1>Built for the <span class="accent">wild</span>,<br>made for everyday.</h1>
+            <p>Calm. Explore. Experience. Kaos dan apparel outdoor yang nyaman dipakai di gunung maupun di kota.</p>
+            <div class="hero-values">
+                <div class="value-item"><span class="value-dot"></span>Calm</div>
+                <div class="value-item"><span class="value-dot"></span>Explore</div>
+                <div class="value-item"><span class="value-dot"></span>Experience</div>
+            </div>
+            <div>
+                <a href="#etalase" class="btn">Lihat Etalase</a>
+                <a href="https://instagram.com/bale.explorer" target="_blank" class="btn btn-outline">Instagram</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="tentang">
+        <span class="section-label fade-in">Tentang Kami</span>
+        <h2 class="fade-in">Explore more. Feel Home.</h2>
+        <p class="fade-in">
+            Bale Explorer lahir dari kecintaan kami terhadap alam dan petualangan. 
+            Setiap desain menggambarkan semangat menjelajah — dari puncak gunung hingga sudut kota. 
+            Kami percaya bahwa pakaian outdoor tak harus terbatas di jalur pendakian, 
+            tapi bisa jadi bagian dari gaya hidup sehari-hari.
+        </p>
+        <div class="about-values fade-in">
+            <div class="about-value">
+                <span class="num">16+</span>
+                <span class="label">Desain</span>
+            </div>
+            <div class="about-value">
+                <span class="num">100%</span>
+                <span class="label">Cotton</span>
+            </div>
+            <div class="about-value">
+                <span class="num">Local</span>
+                <span class="label">Brand</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products / Etalase Section -->
+    <section class="products" id="etalase">
+        <div class="products-container">
+            <div class="products-header fade-in">
+                <div>
+                    <span class="section-label">Etalase</span>
+                    <h2>Koleksi Terbaru</h2>
+                    <p>Pilih desain yang sesuai dengan semangat petualanganmu.</p>
+                </div>
+            </div>
+
+            <div class="product-grid">
+
+                <!-- Product 1 -->
+                <div class="product-card fade-in">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&q=80" alt="Born To Explore Tee" class="product-img">
+                        <div class="product-overlay">
+                            <a href="https://wa.me/6281234567890?text=Halo%20Bale%20Explorer,%20saya%20mau%20order%20Born%20To%20Explore" class="btn btn-small" target="_blank">Pesan Sekarang</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-tag">T-Shirt</span>
+                        <h3>Born To Explore</h3>
+                        <p class="desc">Desain klasik untuk para petualang sejati. Nyaman dipakai di mana saja.</p>
+                        <div class="product-price">Rp 149.000</div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card fade-in">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop&q=80" alt="Summit Journey Tee" class="product-img">
+                        <div class="product-overlay">
+                            <a href="https://wa.me/6281234567890?text=Halo%20Bale%20Explorer,%20saya%20mau%20order%20Summit%20Journey" class="btn btn-small" target="_blank">Pesan Sekarang</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-tag">T-Shirt</span>
+                        <h3>Summit Journey</h3>
+                        <p class="desc">Perjalanan ke puncak dimulai dari langkah pertama. Desain inspiratif.</p>
+                        <div class="product-price">Rp 149.000</div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card fade-in">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=400&fit=crop&q=80" alt="Hikers Tee" class="product-img">
+                        <div class="product-overlay">
+                            <a href="https://wa.me/6281234567890?text=Halo%20Bale%20Explorer,%20saya%20mau%20order%20Hikers" class="btn btn-small" target="_blank">Pesan Sekarang</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-tag">T-Shirt</span>
+                        <h3>Hikers</h3>
+                        <p class="desc">Untuk kamu yang selalu siap menjelajah setiap sudut bumi.</p>
+                        <div class="product-price">Rp 149.000</div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card fade-in">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=400&fit=crop&q=80" alt="Kita Ke Bawa Tee" class="product-img">
+                        <div class="product-overlay">
+                            <a href="https://wa.me/6281234567890?text=Halo%20Bale%20Explorer,%20saya%20mau%20order%20Kita%20Ke%20Bawa" class="btn btn-small" target="_blank">Pesan Sekarang</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-tag">T-Shirt</span>
+                        <h3>Kita Ke Bawa</h3>
+                        <p class="desc">Desain lokal dengan sentuhan humor dan semangat komunitas.</p>
+                        <div class="product-price">Rp 149.000</div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card fade-in">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=400&h=400&fit=crop&q=80" alt="Bale Explorer Tee" class="product-img">
+                        <div class="product-overlay">
+                            <a href="https://wa.me/6281234567890?text=Halo%20Bale%20Explorer,%20saya%20mau%20order%20Bale%20Explorer%20Logo" class="btn btn-small" target="_blank">Pesan Sekarang</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-tag">T-Shirt</span>
+                        <h3>Bale Explorer Logo</h3>
+                        <p class="desc">Logo signature brand kami. Simple, bold, dan timeless.</p>
+                        <div class="product-price">Rp 139.000</div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card fade-in">
+                    <div class="product-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=400&h=400&fit=crop&q=80" alt="Bucket Hat" class="product-img">
+                        <div class="product-overlay">
+                            <a href="https://wa.me/6281234567890?text=Halo%20Bale%20Explorer,%20saya%20mau%20order%20Bucket%20Hat" class="btn btn-small" target="_blank">Pesan Sekarang</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-tag">Accessories</span>
+                        <h3>Bucket Hat</h3>
+                        <p class="desc">Pelindung sempurna untuk petualangan di bawah terik matahari.</p>
+                        <div class="product-price">Rp 99.000</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / Contact Section -->
+    <section class="cta" id="kontak">
+        <div class="cta-content fade-in">
+            <span class="section-label">Hubungi Kami</span>
+            <h2>Siap untuk petualangan berikutnya?</h2>
+            <p>Pesan langsung via WhatsApp atau cek update terbaru di Instagram kami.</p>
+            <div class="cta-buttons">
+                <a href="https://wa.me/6281234567890?text=Halo%20Bale%20Explorer,%20saya%20mau%20order" class="btn" target="_blank">
+                    <span>💬</span> Chat WhatsApp
+                </a>
+                <a href="https://instagram.com/bale.explorer" target="_blank" class="btn btn-outline">
+                    <span>📸</span> @bale.explorer
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="brand">Bale<span>.</span>Explorer</div>
+        <p>Built for the wild, made for everyday.</p>
+        <div class="socials">
+            <a href="https://instagram.com/bale.explorer" target="_blank">Instagram</a>
+            <a href="https://wa.me/6281234567890" target="_blank">WhatsApp</a>
+            <a href="mailto:hello@baleexplorer.com">Email</a>
+        </div>
+        <p>© 2026 Bale Explorer. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Scroll animation (Intersection Observer)
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Navbar background on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(10,10,10,0.95)';
+            } else {
+                navbar.style.background = 'rgba(10,10,10,0.85)';
+            }
+        });
+    </script>
+
+</body>
+</html>
