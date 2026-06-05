@@ -32,13 +32,13 @@ export default function ProductGrid({ limit, horizontal = false }: { limit?: num
     return (
       <div
         ref={scrollRef}
-        className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 -mx-6 px-6"
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 -mx-6 px-6"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         {displayProducts.map((product) => (
-          <div key={product.id} className="snap-start flex-shrink-0" style={{ width: 'min(85vw, 380px)' }}>
+          <div key={product.id} className="snap-start flex-shrink-0" style={{ width: 'min(70vw, 320px)' }}>
             <ProductCard product={product} />
           </div>
         ))}
