@@ -17,7 +17,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://baleexplorer.com'),
+  metadataBase: new URL('https://bale-explorer.vercel.app'),
   title: {
     default: 'Bale Explorer — Built for the wild, made for everyday',
     template: '%s | Bale Explorer',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'id_ID',
-    url: 'https://baleexplorer.com',
+    url: 'https://bale-explorer.vercel.app',
     siteName: 'Bale Explorer',
     title: 'Bale Explorer — Built for the wild, made for everyday',
     description:
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
   },
   alternates: {
-    canonical: 'https://baleexplorer.com',
+    canonical: 'https://bale-explorer.vercel.app',
   },
 };
 
