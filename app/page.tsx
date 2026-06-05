@@ -72,7 +72,7 @@ export default function HomePage() {
             </ScrollReveal>
 
             <ScrollReveal delay={0.1}>
-              <ProductGrid />
+              <ProductGrid horizontal />
             </ScrollReveal>
           </div>
         </section>

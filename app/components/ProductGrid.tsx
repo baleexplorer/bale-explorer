@@ -86,7 +86,7 @@ export default function ProductGrid({ limit, horizontal = false }: { limit?: num
     return (
       <div
         ref={scrollRef}
-        className="flex gap-5 overflow-x-auto snap-x snap-mandatory scrollbar-hide pl-6 pr-6"
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pl-6 pr-6"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapType: 'x mandatory' }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
@@ -97,7 +97,7 @@ export default function ProductGrid({ limit, horizontal = false }: { limit?: num
             data-card
             data-index={idx}
             className="snap-start flex-shrink-0"
-            style={{ width: 'min(70vw, 340px)', scrollSnapAlign: 'start' }}
+            style={{ width: '300px', scrollSnapAlign: 'start' }}
           >
             <ProductCard product={product} />
           </div>
