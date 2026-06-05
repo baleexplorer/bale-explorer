@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "framer-motion": "^12.40.0",
     "lucide-react": "^0.447.0",
     "next": "14.2.18",
     "react": "^18.3.1",
@@ -18,7 +17,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@next/swc-win32-x64-msvc": "^16.2.7",
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
