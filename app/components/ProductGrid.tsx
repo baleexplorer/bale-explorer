@@ -5,103 +5,130 @@ import { products } from '@/lib/data/products';
 import ProductCard from './ProductCard';
 
 export default function ProductGrid({ limit, horizontal = false }: { limit?: number; horizontal?: boolean }) {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const cardWidthRef = useRef(0);
+  const gapRef = useRef(16);
+  const currentTranslateRef = useRef(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const displayProducts = limit ? products.slice(0, limit) : products;
+  const loopedProducts = [...displayProducts, ...displayProducts, ...displayProducts];
+  const offset = displayProducts.length;
 
-  const allItems = [
-    ...displayProducts.slice(-1),
-    ...displayProducts,
-    ...displayProducts.slice(0, 1),
-  ];
+  const measure = useCallback(() => {
+    if (!trackRef.current) return;
+    const card = trackRef.current.querySelector('[data-card]') as HTMLElement | null;
+    if (card) {
+      cardWidthRef.current = card.getBoundingClientRect().width;
+    }
+    const style = window.getComputedStyle(trackRef.current);
+    gapRef.current = parseFloat(style.gap) || 16;
+  }, []);
 
-  const getRealIndex = useCallback(
-    (idx: number) => {
-      if (idx === 0) return displayProducts.length - 1;
-      if (idx > displayProducts.length) return 0;
-      return idx - 1;
+  const setPosition = useCallback(
+    (translate: number, animate: boolean) => {
+      if (!trackRef.current) return;
+      trackRef.current.style.transition = animate ? 'transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1)' : 'none';
+      trackRef.current.style.transform = `translateX(${-translate}px)`;
+      currentTranslateRef.current = translate;
     },
-    [displayProducts.length]
+    []
   );
 
-  const goToReal = useCallback(
-    (idx: number) => {
-      if (!scrollRef.current) return;
-      const cards = scrollRef.current.querySelectorAll('[data-card]');
-      const cardsArr = Array.from(cards);
-      const target = cardsArr.find((card) => {
-        const index = parseInt(card.getAttribute('data-index') || '0', 10);
-        return getRealIndex(index) === idx;
-      });
-      if (target) {
-        target.scrollIntoView({ behavior: 'instant', inline: 'start', block: 'nearest' });
+  useEffect(() => {
+    if (!horizontal || displayProducts.length <= 1 || !trackRef.current) return;
+
+    measure();
+    const startTranslate = offset * (cardWidthRef.current + gapRef.current);
+    currentTranslateRef.current = startTranslate;
+    setPosition(startTranslate, false);
+    setCurrentIndex(0);
+
+    const step = () => {
+      if (!trackRef.current || isPaused) return;
+      const stepPx = cardWidthRef.current + gapRef.current;
+      const current = currentTranslateRef.current;
+      const next = current + stepPx;
+      const maxTranslate = (offset + displayProducts.length) * stepPx;
+
+      if (next >= maxTranslate) {
+        currentTranslateRef.current = offset * stepPx;
+        setPosition(offset * stepPx, false);
+      } else {
+        currentTranslateRef.current = next;
+        setPosition(next, true);
       }
-    },
-    [getRealIndex]
-  );
+
+      const realIdx = Math.round(currentTranslateRef.current / stepPx) % displayProducts.length;
+      setCurrentIndex(realIdx);
+    };
+
+    timerRef.current = setInterval(step, 3000);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [horizontal, displayProducts.length, isPaused, measure, setPosition]);
 
   useEffect(() => {
-    if (!horizontal || displayProducts.length <= 1 || !scrollRef.current) return;
+    if (!horizontal) return;
+    const handleResize = () => {
+      measure();
+      if (trackRef.current) {
+        setPosition(currentTranslateRef.current, false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [horizontal, measure, setPosition]);
 
-    setCurrentIndex(1);
-
-    const container = scrollRef.current;
-    const cards = container.querySelectorAll('[data-card]');
-    if (cards[1]) {
-      cards[1].scrollIntoView({ behavior: 'instant', inline: 'start', block: 'nearest' });
-    }
-
-    const timer = setInterval(() => {
-      if (isPaused) return;
-      setCurrentIndex((prev) => {
-        const next = prev + 1;
-        if (next > displayProducts.length) {
-          setTimeout(() => goToReal(0), 50);
-          return 1;
-        }
-        return next;
-      });
-    }, 2800);
-
-    return () => clearInterval(timer);
-  }, [horizontal, displayProducts.length, isPaused, goToReal]);
-
-  useEffect(() => {
-    if (!horizontal || !scrollRef.current) return;
-    const container = scrollRef.current;
-    const cards = container.querySelectorAll('[data-card]');
-    const cardsArr = Array.from(cards);
-    const target = cardsArr.find((card) => {
-      const index = parseInt(card.getAttribute('data-index') || '0', 10);
-      return getRealIndex(index) === currentIndex;
-    });
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
-    }
-  }, [currentIndex, horizontal, getRealIndex]);
+  const handleCardClick = (idx: number) => {
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 8000);
+    const stepPx = cardWidthRef.current + gapRef.current;
+    const target = offset + idx;
+    currentTranslateRef.current = target * stepPx;
+    setPosition(target * stepPx, true);
+    setCurrentIndex(idx);
+  };
 
   if (horizontal) {
     return (
-      <div
-        ref={scrollRef}
-        className="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide pl-6 pr-6"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapType: 'x mandatory' }}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        {allItems.map((product, idx) => (
+      <div>
+        <div className="overflow-hidden pl-6 pr-6">
           <div
-            key={`${product.slug}-${idx}`}
-            data-card
-            data-index={idx}
-            className="snap-start flex-shrink-0"
-            style={{ width: '300px', scrollSnapAlign: 'start' }}
+            ref={trackRef}
+            className="flex gap-4"
+            style={{ willChange: 'transform' }}
           >
-            <ProductCard product={product} />
+            {loopedProducts.map((product, idx) => (
+              <div
+                key={`${product.id}-${idx}`}
+                data-card
+                className="flex-shrink-0"
+                style={{ width: '300px' }}
+              >
+                <div onClick={() => handleCardClick(idx - offset)} style={{ cursor: 'pointer' }}>
+                  <ProductCard product={product} />
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+        <div className="flex justify-center gap-2 mt-6">
+          {displayProducts.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleCardClick(idx)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                currentIndex === idx ? 'w-6 bg-accent' : 'w-2 bg-text/30'
+              }`}
+              aria-label={`Slide ${idx + 1}`}
+            />
+          ))}
+        </div>
       </div>
     );
   }
